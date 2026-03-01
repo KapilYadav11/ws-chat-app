@@ -1,34 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [message, setMessage] = useState(["hi there , building a chat app"]);
+  useEffect(()=>{
+    const ws = new WebSocket("ws://localhost:3000");
+    ws.onmessage =  (event) => {
+      setMessage(m => [...m, event.data])
 
+    }
+  }, [])
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className='h-screen bg-black'>
+      <div className='h-[95vh]'>
+        {message.map(message => <div>{message}</div>)}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className='w-full bg-white flex p-4'>
+        <input className='flex-1'></input>
+        <button className='bg-purple-400 text-white'>Send Message</button>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      
+    </div>
   )
 }
 
